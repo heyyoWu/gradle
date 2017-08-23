@@ -23,7 +23,6 @@ import org.gradle.api.initialization.Settings;
 import org.gradle.api.internal.initialization.ClassLoaderScope;
 import org.gradle.api.internal.plugins.PluginAwareInternal;
 import org.gradle.api.internal.project.ProjectRegistry;
-import org.gradle.api.vcs.internal.SourceControlInternal;
 import org.gradle.groovy.scripts.ScriptSource;
 import org.gradle.initialization.DefaultProjectDescriptor;
 
@@ -55,7 +54,4 @@ public interface SettingsInternal extends Settings, PluginAwareInternal {
 
     @Override
     GradleInternal getGradle();
-
-    @Override
-    SourceControlInternal getSourceControl();
 }
