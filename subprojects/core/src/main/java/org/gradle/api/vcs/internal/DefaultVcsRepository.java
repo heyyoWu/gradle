@@ -18,9 +18,21 @@ package org.gradle.api.vcs.internal;
 
 import org.gradle.api.vcs.VcsRepository;
 
+import java.io.File;
+
 // TODO: Remove this when we have a real Vcs (like Git)
 public class DefaultVcsRepository extends VcsRepository {
+    private File dir;
+
     public DefaultVcsRepository(String name) {
         super(name);
+    }
+
+    public File getDir() {
+        return dir;
+    }
+
+    public void setDir(File dir) {
+        this.dir = dir;
     }
 }

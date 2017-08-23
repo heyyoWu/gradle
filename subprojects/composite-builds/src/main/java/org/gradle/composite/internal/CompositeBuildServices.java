@@ -49,7 +49,6 @@ public class CompositeBuildServices extends AbstractPluginServiceRegistry {
     }
 
     private static class CompositeBuildTreeScopeServices {
-        // TODO: This should probably be somewhere else so we can combine source controls from included builds
         protected SourceControlInternal createSourceControlInternal(Instantiator instantiator) {
             return instantiator.newInstance(DefaultSourceControl.class, instantiator);
         }

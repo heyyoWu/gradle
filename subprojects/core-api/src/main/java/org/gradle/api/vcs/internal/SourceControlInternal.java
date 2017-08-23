@@ -21,6 +21,9 @@ import org.gradle.api.vcs.SourceControl;
 import org.gradle.api.vcs.VcsMapping;
 import org.gradle.api.vcs.VcsRepository;
 
+import java.util.Set;
+
 public interface SourceControlInternal extends SourceControl {
     ImmutableSetMultimap<VcsRepository, VcsMapping> getRepositoryToVcsMapping();
+    Set<VcsRepository> getResolvedImplicitBuilds();
 }

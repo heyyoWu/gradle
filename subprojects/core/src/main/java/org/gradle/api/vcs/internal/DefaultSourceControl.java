@@ -24,6 +24,8 @@ import org.gradle.api.vcs.VcsRepository;
 import org.gradle.api.vcs.VcsRepositoryHandler;
 import org.gradle.internal.reflect.Instantiator;
 
+import java.util.Set;
+
 public class DefaultSourceControl implements SourceControlInternal {
     private final VcsRepositoryHandler vcsRepositoryHandler;
     private final VcsMappingHandlerInternal vcsMappingHandler;
@@ -58,5 +60,10 @@ public class DefaultSourceControl implements SourceControlInternal {
     @Override
     public ImmutableSetMultimap<VcsRepository, VcsMapping> getRepositoryToVcsMapping() {
         return ImmutableSetMultimap.copyOf(vcsMappingHandler.getVcsMappings());
+    }
+
+    @Override
+    public Set<VcsRepository> getResolvedImplicitBuilds() {
+        return vcsRepositoryHandler;
     }
 }

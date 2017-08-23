@@ -16,10 +16,12 @@
 
 package org.gradle.initialization;
 
+import org.gradle.api.vcs.internal.SourceControlInternal;
 import org.gradle.composite.internal.IncludedBuildFactory;
 import org.gradle.initialization.buildsrc.BuildSourceBuilder;
 import org.gradle.internal.composite.CompositeBuildSettingsLoader;
 import org.gradle.internal.composite.CompositeContextBuilder;
+import org.gradle.internal.sources.SourceControlSettingsLoader;
 
 public class DefaultSettingsLoaderFactory implements SettingsLoaderFactory {
     private final ISettingsFinder settingsFinder;
@@ -27,14 +29,16 @@ public class DefaultSettingsLoaderFactory implements SettingsLoaderFactory {
     private final BuildSourceBuilder buildSourceBuilder;
     private final CompositeContextBuilder compositeContextBuilder;
     private final IncludedBuildFactory includedBuildFactory;
+    private final SourceControlInternal sourceControlInternal;
 
     public DefaultSettingsLoaderFactory(ISettingsFinder settingsFinder, SettingsProcessor settingsProcessor, BuildSourceBuilder buildSourceBuilder,
-                                        CompositeContextBuilder compositeContextBuilder, IncludedBuildFactory includedBuildFactory) {
+                                        CompositeContextBuilder compositeContextBuilder, IncludedBuildFactory includedBuildFactory, SourceControlInternal sourceControlInternal) {
         this.settingsFinder = settingsFinder;
         this.settingsProcessor = settingsProcessor;
         this.buildSourceBuilder = buildSourceBuilder;
         this.compositeContextBuilder = compositeContextBuilder;
         this.includedBuildFactory = includedBuildFactory;
+        this.sourceControlInternal = sourceControlInternal;
     }
 
     @Override
@@ -49,8 +53,9 @@ public class DefaultSettingsLoaderFactory implements SettingsLoaderFactory {
 
     private SettingsLoader compositeBuildSettingsLoader() {
         return new CompositeBuildSettingsLoader(
-            defaultSettingsLoader(),
-            compositeContextBuilder, includedBuildFactory
+            new SourceControlSettingsLoader(defaultSettingsLoader(), sourceControlInternal),
+            compositeContextBuilder,
+            includedBuildFactory
         );
     }
 
