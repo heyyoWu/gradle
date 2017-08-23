@@ -21,6 +21,8 @@ import org.gradle.api.internal.artifacts.ImmutableModuleIdentifierFactory;
 import org.gradle.api.internal.composite.CompositeBuildContext;
 import org.gradle.api.internal.initialization.ScriptClassPathInitializer;
 import org.gradle.api.internal.tasks.TaskReferenceResolver;
+import org.gradle.api.vcs.internal.DefaultSourceControl;
+import org.gradle.api.vcs.internal.SourceControlInternal;
 import org.gradle.initialization.BuildIdentity;
 import org.gradle.initialization.NestedBuildFactory;
 import org.gradle.internal.composite.CompositeContextBuilder;
@@ -47,6 +49,11 @@ public class CompositeBuildServices extends AbstractPluginServiceRegistry {
     }
 
     private static class CompositeBuildTreeScopeServices {
+        // TODO: This should probably be somewhere else so we can combine source controls from included builds
+        protected SourceControlInternal createSourceControlInternal(Instantiator instantiator) {
+            return instantiator.newInstance(DefaultSourceControl.class, instantiator);
+        }
+
         public DefaultIncludedBuilds createIncludedBuilds() {
             return new DefaultIncludedBuilds();
         }

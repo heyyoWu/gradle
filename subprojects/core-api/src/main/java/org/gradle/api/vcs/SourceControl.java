@@ -21,17 +21,18 @@ import org.gradle.api.Incubating;
 
 /**
  * In settings.gradle:
+ * <pre>
  * sourceControl {
  *    repositories {
- *        foobar(GitVcs) {
+ *        gradle(GitVcs) {
  *            url = "https://github.com/gradle/gradle"
  *        }
  *    }
  *    vcsMappings {
- *        add("foobar", maven("org.gradle:tooling-api"))
+ *        add("gradle", maven("org.gradle:tooling-api"))
  *    }
  * }
- *
+ * </pre>
  * @since 4.2
  */
 @Incubating

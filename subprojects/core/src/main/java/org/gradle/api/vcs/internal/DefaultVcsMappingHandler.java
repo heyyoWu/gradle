@@ -16,12 +16,16 @@
 
 package org.gradle.api.vcs.internal;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import org.gradle.api.vcs.VcsMapping;
 import org.gradle.api.vcs.VcsRepository;
 import org.gradle.api.vcs.VcsRepositoryContainer;
 
+// TODO: Add MethodMixIn so we can do:
+// vcsMappings { foo maven("com.example", "foo") }
+// instead of calling add() directly.
 public class DefaultVcsMappingHandler implements VcsMappingHandlerInternal {
     private final VcsRepositoryContainer vcsRepositories;
     private final Multimap<VcsRepository, VcsMapping> vcsMappings;
@@ -33,15 +37,15 @@ public class DefaultVcsMappingHandler implements VcsMappingHandlerInternal {
 
     @Override
     public VcsMapping maven(String group, String name) {
+        Preconditions.checkNotNull(group, "Group must be specified");
+        Preconditions.checkNotNull(name, "Module name must be specified");
         return new DefaultMavenVcsMapping(group, name);
     }
 
     @Override
     public VcsMapping add(String repositoryName, VcsMapping mapping) {
         VcsRepository vcsRepository = vcsRepositories.getByName(repositoryName);
-        if (!vcsMappings.put(vcsRepository, mapping)) {
-            throw new IllegalStateException("cannot add the same mapping twice");
-        }
+        vcsMappings.put(vcsRepository, mapping);
         return mapping;
     }
 

@@ -25,5 +25,8 @@ public interface VcsMappingHandlerInternal extends VcsMappingHandler {
     // TODO: Expose this as extensions or on the public interface
     VcsMapping maven(String group, String name);
 
+    /**
+     * Provides association between repository and mapped dependencies
+     */
     Multimap<VcsRepository, VcsMapping> getVcsMappings();
 }

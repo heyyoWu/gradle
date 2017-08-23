@@ -29,8 +29,6 @@ import org.gradle.api.internal.file.FileResolver;
 import org.gradle.api.internal.initialization.BasicDomainObjectContext;
 import org.gradle.api.internal.plugins.PluginInspector;
 import org.gradle.api.internal.plugins.PluginRegistry;
-import org.gradle.api.vcs.internal.DefaultSourceControl;
-import org.gradle.api.vcs.internal.SourceControlInternal;
 import org.gradle.cache.CacheRepository;
 import org.gradle.cache.FileLockManager;
 import org.gradle.cache.PersistentCache;
@@ -90,12 +88,6 @@ public class PluginUsePluginServiceRegistry extends AbstractPluginServiceRegistr
         protected PluginManagementSpec createPluginManagementSpec(Instantiator instantiator, PluginRepositoriesSpec pluginRepositoriesSpec, PluginResolutionStrategyInternal internalPluginResolutionStrategy) {
             return instantiator.newInstance(DefaultPluginManagementSpec.class, pluginRepositoriesSpec, internalPluginResolutionStrategy);
         }
-
-        // TODO: This should probably be somewhere else so we can combine source controls from included builds
-        protected SourceControlInternal createSourceControlInternal(Instantiator instantiator) {
-            return instantiator.newInstance(DefaultSourceControl.class, instantiator);
-        }
-
     }
 
     private static class BuildScopeServices {

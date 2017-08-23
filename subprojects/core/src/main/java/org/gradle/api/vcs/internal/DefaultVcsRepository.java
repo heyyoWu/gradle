@@ -18,6 +18,7 @@ package org.gradle.api.vcs.internal;
 
 import org.gradle.api.vcs.VcsRepository;
 
+// TODO: Remove this when we have a real Vcs (like Git)
 public class DefaultVcsRepository extends VcsRepository {
     public DefaultVcsRepository(String name) {
         super(name);

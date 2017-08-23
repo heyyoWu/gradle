@@ -34,4 +34,28 @@ public class DefaultMavenVcsMapping implements MavenVcsMapping {
     public String getModule() {
         return module;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        DefaultMavenVcsMapping that = (DefaultMavenVcsMapping) o;
+
+        if (!group.equals(that.group)) {
+            return false;
+        }
+        return module.equals(that.module);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = group.hashCode();
+        result = 31 * result + module.hashCode();
+        return result;
+    }
 }

@@ -33,4 +33,6 @@ public interface VcsMappingHandler {
      * @return the dependency mapping.
      */
     VcsMapping add(String repositoryName, VcsMapping mapping);
+
+    // TODO: Other useful methods like DependencyHandler has for adding mappings
 }
