@@ -24,12 +24,13 @@ import org.gradle.api.Incubating;
  * <pre>
  * sourceControl {
  *    repositories {
+ *        // TODO: Need to create GitVcs
  *        gradle(GitVcs) {
  *            url = "https://github.com/gradle/gradle"
  *        }
  *    }
  *    vcsMappings {
- *        add("gradle", maven("org.gradle:tooling-api"))
+ *        add("gradle", maven("org.gradle", "tooling-api"))
  *    }
  * }
  * </pre>
