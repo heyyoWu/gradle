@@ -16,16 +16,30 @@
 
 package org.gradle.api.vcs.internal
 
+import org.gradle.api.vcs.VcsRepository
 import org.gradle.integtests.fixtures.AbstractIntegrationSpec
 
 class SourceControlIntegrationTest extends AbstractIntegrationSpec {
+    def setup() {
+        settingsFile << """
+            class SimpleVcsRepository extends ${VcsRepository.canonicalName} {
+                SimpleVcsRepository(String name) { super(name) }
+            }
+            
+            sourceControl {
+                repositories {
+                    registerBinding(SimpleVcsRepository, SimpleVcsRepository)
+                }
+            }
+        """
+    }
     def "can define source repositories"() {
         settingsFile << """
             sourceControl {
                 repositories {
-                    foo(VcsRepository) {
+                    foo(SimpleVcsRepository) {
                     }
-                    bar(VcsRepository)
+                    bar(SimpleVcsRepository)
                 }
             }
         """
@@ -43,7 +57,7 @@ class SourceControlIntegrationTest extends AbstractIntegrationSpec {
         settingsFile << """
             sourceControl {
                 repositories {
-                    foo(VcsRepository)
+                    foo(SimpleVcsRepository)
                 }
                 vcsMappings {
                     add("foo", maven("com.example", "foo"))
@@ -69,8 +83,8 @@ class SourceControlIntegrationTest extends AbstractIntegrationSpec {
         settingsFile << """
             sourceControl {
                 repositories {
-                    foo(VcsRepository)
-                    bar(VcsRepository)
+                    foo(SimpleVcsRepository)
+                    bar(SimpleVcsRepository)
                 }
                 vcsMappings {
                     add("foo", maven("com.example", "foo"))
@@ -103,7 +117,7 @@ class SourceControlIntegrationTest extends AbstractIntegrationSpec {
         settingsFile << """
             sourceControl {
                 repositories {
-                    foo(VcsRepository)
+                    foo(SimpleVcsRepository)
                 }
                 vcsMappings {
                     add("foo", maven("com.example", "foo"))

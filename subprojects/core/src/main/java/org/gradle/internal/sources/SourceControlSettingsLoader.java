@@ -42,7 +42,9 @@ public class SourceControlSettingsLoader implements SettingsLoader {
         for (VcsRepository vcsRepository : sourceControlInternal.getResolvedImplicitBuilds()) {
             // TODO: Go checkout VCS repositories, this should happen elsewhere
             File checkoutDir = initialize(gradle.getGradleUserHomeDir(), vcsRepository);
-            settings.includeBuild(checkoutDir);
+            if (checkoutDir != null) {
+                settings.includeBuild(checkoutDir);
+            }
         }
         return settings;
     }
