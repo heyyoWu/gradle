@@ -16,13 +16,24 @@
 
 package org.gradle.api.vcs.internal;
 
-import org.gradle.api.internal.DefaultPolymorphicDomainObjectContainer;
 import org.gradle.api.vcs.VcsRepository;
-import org.gradle.api.vcs.VcsRepositoryHandler;
-import org.gradle.internal.reflect.Instantiator;
 
-public class DefaultVcsRepositoryHandler extends DefaultPolymorphicDomainObjectContainer<VcsRepository> implements VcsRepositoryHandler {
-    public DefaultVcsRepositoryHandler(Class<VcsRepository> type, Instantiator instantiator) {
-        super(type, instantiator);
+import java.io.File;
+
+// TODO: Remove this when we have a real Vcs (like Git)
+public class DirectoryRepository implements VcsRepository {
+    private File sourceDir;
+
+    @Override
+    public String getDisplayName() {
+        return "dir repo " + sourceDir;
+    }
+
+    public File getSourceDir() {
+        return sourceDir;
+    }
+
+    public void setSourceDir(File sourceDir) {
+        this.sourceDir = sourceDir;
     }
 }

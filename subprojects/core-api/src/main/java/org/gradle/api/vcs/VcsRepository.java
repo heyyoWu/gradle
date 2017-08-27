@@ -16,29 +16,15 @@
 
 package org.gradle.api.vcs;
 
+import org.gradle.api.Describable;
 import org.gradle.api.Incubating;
-import org.gradle.api.Named;
 
 /**
  * A source repository.
  *
- * @since 4.2
+ * @since 4.3
  */
 @Incubating
-public abstract class VcsRepository implements Named {
-    private final String name;
+public interface VcsRepository extends Describable {
 
-    public VcsRepository(String name) {
-        this.name = name;
-    }
-
-    @Override
-    public final String getName() {
-        return name;
-    }
-
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + "{" + "name='" + name + '\'' + '}';
-    }
 }

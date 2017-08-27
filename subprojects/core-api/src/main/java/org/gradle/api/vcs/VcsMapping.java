@@ -17,12 +17,21 @@
 package org.gradle.api.vcs;
 
 import org.gradle.api.Incubating;
+import org.gradle.api.artifacts.component.ComponentSelector;
 
 /**
  * A dependency mapping provided by a VCS repository.
  *
- * @since 4.2
+ * @since 4.3
  */
 @Incubating
 public interface VcsMapping {
+    /**
+     * The requested dependency, before it is resolved.
+     * The requested dependency does not change even if there are multiple dependency substitution rules
+     * that manipulate the dependency metadata.
+     */
+    ComponentSelector getRequested();
+
+    void from(VcsRepository vcsRepository);
 }

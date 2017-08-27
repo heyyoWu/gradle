@@ -75,15 +75,19 @@ import org.gradle.api.internal.notations.ProjectDependencyFactory;
 import org.gradle.api.internal.project.ProjectInternal;
 import org.gradle.api.internal.project.ProjectRegistry;
 import org.gradle.api.internal.runtimeshaded.RuntimeShadedJarFactory;
+import org.gradle.api.vcs.internal.ExternalSourceDependencyResolver;
+import org.gradle.api.vcs.internal.VcsMappingsInternal;
 import org.gradle.authentication.Authentication;
 import org.gradle.cache.internal.CacheScopeMapping;
 import org.gradle.cache.internal.GeneratedGradleJarCache;
 import org.gradle.cache.internal.ProducerGuard;
 import org.gradle.cache.internal.VersionStrategy;
+import org.gradle.composite.internal.IncludedBuildFactory;
 import org.gradle.initialization.BuildIdentity;
 import org.gradle.initialization.DefaultBuildIdentity;
 import org.gradle.initialization.ProjectAccessListener;
 import org.gradle.internal.component.external.model.ModuleComponentArtifactMetadata;
+import org.gradle.internal.composite.CompositeContextBuilder;
 import org.gradle.internal.installation.CurrentGradleInstallation;
 import org.gradle.internal.logging.progress.ProgressLoggerFactory;
 import org.gradle.internal.operations.BuildOperationExecutor;
@@ -331,10 +335,32 @@ class DependencyManagementBuildScopeServices {
         return new ProjectResolverProviderFactory(resolver);
     }
 
+    ResolverProviderFactory createExternalSourceResolverProviderFactory(final ProjectDependencyResolver resolver, VcsMappingsInternal vcsMappingsInternal, CompositeContextBuilder compositeContextBuilder, IncludedBuildFactory includedBuildFactory) {
+        return new ExternalSourceDependencyResolverProviderFactory(new ExternalSourceDependencyResolver(resolver, vcsMappingsInternal.getVcsMappingRule(), compositeContextBuilder, includedBuildFactory));
+    }
+
     private static class ProjectResolverProviderFactory implements ResolverProviderFactory {
         private final ProjectDependencyResolver resolver;
 
         public ProjectResolverProviderFactory(ProjectDependencyResolver resolver) {
+            this.resolver = resolver;
+        }
+
+        @Override
+        public boolean canCreate(ResolveContext context) {
+            return true;
+        }
+
+        @Override
+        public ComponentResolvers create(ResolveContext context) {
+            return resolver;
+        }
+    }
+
+    private static class ExternalSourceDependencyResolverProviderFactory implements ResolverProviderFactory {
+        private final ExternalSourceDependencyResolver resolver;
+
+        public ExternalSourceDependencyResolverProviderFactory(ExternalSourceDependencyResolver resolver) {
             this.resolver = resolver;
         }
 

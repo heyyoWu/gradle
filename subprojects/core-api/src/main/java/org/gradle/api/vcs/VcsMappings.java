@@ -16,14 +16,34 @@
 
 package org.gradle.api.vcs;
 
-import org.gradle.api.ExtensiblePolymorphicDomainObjectContainer;
+import org.gradle.api.Action;
 import org.gradle.api.Incubating;
+import org.gradle.internal.HasInternalProtocol;
 
 /**
- * A {@code VcsRepositoryContainer} contains all known source repositories in a build.
- *
- * @since 4.2
+ * In settings.gradle:
+ * <pre>
+ * vcsMappings {
+ *   withModule("group:name") {
+ *     from vcs(GitVcs) {
+ *         url = "..."
+ *     }
+ *   }
+ *   all { details ->
+ *       if (details.requested.group == "group") {
+ *           from vcs(GitVcs) {
+ *               url = "..."
+ *           }
+ *       }
+ *   }
+ * }
+ * </pre>
+ * @since 4.3
  */
 @Incubating
-public interface VcsRepositoryContainer extends ExtensiblePolymorphicDomainObjectContainer<VcsRepository> {
+@HasInternalProtocol
+public interface VcsMappings {
+    VcsMappings all(Action<VcsMapping> rule);
+    VcsMappings withModule(String groupName, Action<VcsMapping> rule);
+    <T extends VcsRepository> T vcs(Class<T> type, Action<? super T> configuration);
 }

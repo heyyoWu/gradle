@@ -16,12 +16,12 @@
 
 package org.gradle.initialization;
 
-import org.gradle.api.vcs.internal.SourceControlInternal;
+import org.gradle.api.vcs.internal.VcsMappingsInternal;
 import org.gradle.composite.internal.IncludedBuildFactory;
 import org.gradle.initialization.buildsrc.BuildSourceBuilder;
 import org.gradle.internal.composite.CompositeBuildSettingsLoader;
 import org.gradle.internal.composite.CompositeContextBuilder;
-import org.gradle.internal.sources.SourceControlSettingsLoader;
+import org.gradle.internal.sources.VcsMappingsSettingsLoader;
 
 public class DefaultSettingsLoaderFactory implements SettingsLoaderFactory {
     private final ISettingsFinder settingsFinder;
@@ -29,16 +29,16 @@ public class DefaultSettingsLoaderFactory implements SettingsLoaderFactory {
     private final BuildSourceBuilder buildSourceBuilder;
     private final CompositeContextBuilder compositeContextBuilder;
     private final IncludedBuildFactory includedBuildFactory;
-    private final SourceControlInternal sourceControlInternal;
+    private final VcsMappingsInternal vcsMappingsInternal;
 
     public DefaultSettingsLoaderFactory(ISettingsFinder settingsFinder, SettingsProcessor settingsProcessor, BuildSourceBuilder buildSourceBuilder,
-                                        CompositeContextBuilder compositeContextBuilder, IncludedBuildFactory includedBuildFactory, SourceControlInternal sourceControlInternal) {
+                                        CompositeContextBuilder compositeContextBuilder, IncludedBuildFactory includedBuildFactory, VcsMappingsInternal vcsMappingsInternal) {
         this.settingsFinder = settingsFinder;
         this.settingsProcessor = settingsProcessor;
         this.buildSourceBuilder = buildSourceBuilder;
         this.compositeContextBuilder = compositeContextBuilder;
         this.includedBuildFactory = includedBuildFactory;
-        this.sourceControlInternal = sourceControlInternal;
+        this.vcsMappingsInternal = vcsMappingsInternal;
     }
 
     @Override
@@ -53,7 +53,7 @@ public class DefaultSettingsLoaderFactory implements SettingsLoaderFactory {
 
     private SettingsLoader compositeBuildSettingsLoader() {
         return new CompositeBuildSettingsLoader(
-            new SourceControlSettingsLoader(defaultSettingsLoader(), sourceControlInternal),
+            new VcsMappingsSettingsLoader(defaultSettingsLoader(), vcsMappingsInternal),
             compositeContextBuilder,
             includedBuildFactory
         );

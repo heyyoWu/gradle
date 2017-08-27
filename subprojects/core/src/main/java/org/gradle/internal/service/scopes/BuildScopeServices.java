@@ -68,7 +68,7 @@ import org.gradle.api.internal.project.taskfactory.TaskFactory;
 import org.gradle.api.internal.tasks.execution.statistics.TaskExecutionStatisticsEventAdapter;
 import org.gradle.api.internal.tasks.execution.statistics.TaskExecutionStatisticsListener;
 import org.gradle.api.provider.ProviderFactory;
-import org.gradle.api.vcs.internal.SourceControlInternal;
+import org.gradle.api.vcs.internal.VcsMappingsInternal;
 import org.gradle.cache.CacheRepository;
 import org.gradle.cache.CacheValidator;
 import org.gradle.caching.internal.BuildCacheServices;
@@ -311,7 +311,7 @@ public class BuildScopeServices extends DefaultServiceRegistry {
                                                                 CachingServiceLocator cachingServiceLocator,
                                                                 CompositeContextBuilder compositeContextBuilder,
                                                                 IncludedBuildFactory includedBuildFactory,
-                                                                SourceControlInternal sourceControlInternal) {
+                                                                VcsMappingsInternal sourceControlInternal) {
         return new DefaultSettingsLoaderFactory(
             new DefaultSettingsFinder(new BuildLayoutFactory()),
             settingsProcessor,

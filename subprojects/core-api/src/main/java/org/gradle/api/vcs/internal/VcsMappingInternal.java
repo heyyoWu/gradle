@@ -16,17 +16,14 @@
 
 package org.gradle.api.vcs.internal;
 
-import com.google.common.collect.Multimap;
+import org.gradle.api.artifacts.ModuleVersionSelector;
 import org.gradle.api.vcs.VcsMapping;
-import org.gradle.api.vcs.VcsMappingHandler;
 import org.gradle.api.vcs.VcsRepository;
 
-public interface VcsMappingHandlerInternal extends VcsMappingHandler {
-    // TODO: Expose this as extensions or on the public interface
-    VcsMapping maven(String group, String name);
+public interface VcsMappingInternal extends VcsMapping {
+    ModuleVersionSelector getOldRequested();
 
-    /**
-     * Provides association between repository and mapped dependencies
-     */
-    Multimap<VcsRepository, VcsMapping> getVcsMappings();
+    VcsRepository getRepository();
+
+    boolean isUpdated();
 }

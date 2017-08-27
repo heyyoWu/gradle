@@ -14,25 +14,28 @@
  * limitations under the License.
  */
 
-package org.gradle.api.vcs;
+package org.gradle.api.vcs.internal;
 
-import org.gradle.api.Incubating;
+import org.gradle.api.vcs.VcsRepository;
 
-/**
- * A {@code VcsMappingHandler} is used to declare VCS mappings to repositories.
- *
- * @since 4.2
- */
-@Incubating
-public interface VcsMappingHandler {
-    /**
-     * Adds a VCS mapping for the given repository name.
-     * @param repositoryName name of the repository that provides the mapping
-     * @param mapping dependency mapping
-     *
-     * @return the dependency mapping.
-     */
-    VcsMapping add(String repositoryName, VcsMapping mapping);
+import java.io.File;
 
-    // TODO: Other useful methods like DependencyHandler has for adding mappings
+public class DefaultVcsCheckout implements VcsCheckout {
+    private final File dir;
+    private final VcsRepository vcsRepository;
+
+    public DefaultVcsCheckout(File dir, VcsRepository repository) {
+        this.dir = dir;
+        vcsRepository = repository;
+    }
+
+    @Override
+    public File getDir() {
+        return dir;
+    }
+
+    @Override
+    public VcsRepository getRepository() {
+        return vcsRepository;
+    }
 }
