@@ -20,18 +20,19 @@ import org.gradle.api.Action;
 import org.gradle.api.Incubating;
 
 /**
+ * Configuration related to source dependencies.
  *
  * @since 4.3
  */
 @Incubating
 public interface SourceControl {
     /**
-     * Configures source control.
+     * Configures VCS mappings.
      */
     void vcsMappings(Action<? super VcsMappings> configuration);
 
     /**
-     * Returns the source control configuration.
+     * Returns the VCS mappings configuration.
      */
     VcsMappings getVcsMappings();
 }
