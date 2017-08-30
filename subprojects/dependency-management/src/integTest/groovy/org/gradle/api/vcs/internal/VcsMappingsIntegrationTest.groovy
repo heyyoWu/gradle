@@ -48,10 +48,12 @@ class VcsMappingsIntegrationTest extends AbstractIntegrationSpec {
 
     def "can define and use source repositories"() {
         settingsFile << """
-            vcsMappings {
-                withModule("org.test:dep") {
-                    from vcs(DirectoryRepository) {
-                        sourceDir = file("dep")
+            sourceControl {
+                vcsMappings {
+                    withModule("org.test:dep") {
+                        from vcs(DirectoryRepository) {
+                            sourceDir = file("dep")
+                        }
                     }
                 }
             }
@@ -63,11 +65,13 @@ class VcsMappingsIntegrationTest extends AbstractIntegrationSpec {
 
     def "can define and use source repositories with all {}"() {
         settingsFile << """
-            vcsMappings {
-                all { details ->
-                    if (details.requested.group == "org.test") {
-                        from vcs(DirectoryRepository) {
-                            sourceDir = file("dep")
+            sourceControl {
+                vcsMappings {
+                    all { details ->
+                        if (details.requested.group == "org.test") {
+                            from vcs(DirectoryRepository) {
+                                sourceDir = file("dep")
+                            }
                         }
                     }
                 }
@@ -83,16 +87,18 @@ class VcsMappingsIntegrationTest extends AbstractIntegrationSpec {
             // include the missing dep as a composite
             includeBuild 'dep'
             
-            vcsMappings {
-                withModule("unused:dep") {
-                    from vcs(DirectoryRepository) {
-                        sourceDir = file("does-not-exist")
-                    }
-                }
-                all { details ->
-                    if (details.requested.group == "unused") {
+            sourceControl {
+                vcsMappings {
+                    withModule("unused:dep") {
                         from vcs(DirectoryRepository) {
                             sourceDir = file("does-not-exist")
+                        }
+                    }
+                    all { details ->
+                        if (details.requested.group == "unused") {
+                            from vcs(DirectoryRepository) {
+                                sourceDir = file("does-not-exist")
+                            }
                         }
                     }
                 }
@@ -106,15 +112,17 @@ class VcsMappingsIntegrationTest extends AbstractIntegrationSpec {
 
     def "last vcs mapping rule wins"() {
         settingsFile << """
-            vcsMappings {
-                withModule("org.test:dep") {
-                    from vcs(DirectoryRepository) {
-                        sourceDir = file("does-not-exist")
+            sourceControl {
+                vcsMappings {
+                    withModule("org.test:dep") {
+                        from vcs(DirectoryRepository) {
+                            sourceDir = file("does-not-exist")
+                        }
                     }
-                }
-                withModule("org.test:dep") {
-                    from vcs(DirectoryRepository) {
-                        sourceDir = file("dep")
+                    withModule("org.test:dep") {
+                        from vcs(DirectoryRepository) {
+                            sourceDir = file("dep")
+                        }
                     }
                 }
             }

@@ -21,8 +21,6 @@ import org.gradle.api.internal.artifacts.ImmutableModuleIdentifierFactory;
 import org.gradle.api.internal.composite.CompositeBuildContext;
 import org.gradle.api.internal.initialization.ScriptClassPathInitializer;
 import org.gradle.api.internal.tasks.TaskReferenceResolver;
-import org.gradle.api.vcs.internal.DefaultVcsMappings;
-import org.gradle.api.vcs.internal.VcsMappingsInternal;
 import org.gradle.initialization.BuildIdentity;
 import org.gradle.initialization.NestedBuildFactory;
 import org.gradle.internal.composite.CompositeContextBuilder;
@@ -34,25 +32,17 @@ import org.gradle.internal.service.scopes.AbstractPluginServiceRegistry;
 import org.gradle.internal.work.WorkerLeaseService;
 
 public class CompositeBuildServices extends AbstractPluginServiceRegistry {
-    public void registerGlobalServices(ServiceRegistration registration) {
-    }
-
+    @Override
     public void registerBuildTreeServices(ServiceRegistration registration) {
         registration.addProvider(new CompositeBuildTreeScopeServices());
     }
 
+    @Override
     public void registerBuildServices(ServiceRegistration registration) {
         registration.addProvider(new CompositeBuildBuildScopeServices());
     }
 
-    private static class CompositeBuildGlobalScopeServices {
-    }
-
     private static class CompositeBuildTreeScopeServices {
-        protected VcsMappingsInternal createSourceControlInternal(Instantiator instantiator) {
-            return instantiator.newInstance(DefaultVcsMappings.class, instantiator);
-        }
-
         public DefaultIncludedBuilds createIncludedBuilds() {
             return new DefaultIncludedBuilds();
         }

@@ -23,8 +23,13 @@ import org.gradle.api.internal.artifacts.transform.DefaultTransformedFileCache;
 import org.gradle.api.internal.artifacts.transform.TransformedFileCache;
 import org.gradle.api.internal.changedetection.state.FileSystemSnapshotter;
 import org.gradle.api.internal.changedetection.state.InMemoryCacheDecoratorFactory;
+import org.gradle.api.vcs.SourceControl;
+import org.gradle.api.vcs.internal.DefaultSourceControl;
+import org.gradle.api.vcs.internal.DefaultVcsMappings;
+import org.gradle.api.vcs.internal.VcsMappingsInternal;
 import org.gradle.cache.CacheRepository;
 import org.gradle.internal.event.ListenerManager;
+import org.gradle.internal.reflect.Instantiator;
 import org.gradle.internal.service.ServiceRegistration;
 import org.gradle.internal.service.scopes.AbstractPluginServiceRegistry;
 
@@ -38,21 +43,40 @@ public class DependencyServices extends AbstractPluginServiceRegistry {
         registration.addProvider(new DependencyManagementGradleUserHomeScopeServices());
     }
 
+    @Override
     public void registerBuildSessionServices(ServiceRegistration registration) {
-        registration.addProvider(new Object() {
-            CacheLockingManager createCacheLockingManager(CacheRepository cacheRepository, ArtifactCacheMetaData artifactCacheMetaData) {
-                return new DefaultCacheLockingManager(cacheRepository, artifactCacheMetaData);
-            }
-
-            TransformedFileCache createTransformedFileCache(ArtifactCacheMetaData artifactCacheMetaData, CacheRepository cacheRepository, InMemoryCacheDecoratorFactory cacheDecoratorFactory, FileSystemSnapshotter fileSystemSnapshotter, ListenerManager listenerManager) {
-                DefaultTransformedFileCache transformedFileCache = new DefaultTransformedFileCache(artifactCacheMetaData, cacheRepository, cacheDecoratorFactory, fileSystemSnapshotter);
-                listenerManager.addListener(transformedFileCache);
-                return transformedFileCache;
-            }
-        });
+        registration.addProvider(new DependencyManagementBuildSessionServices());
     }
 
+    @Override
+    public void registerBuildTreeServices(ServiceRegistration registration) {
+        registration.addProvider(new DependencyManagementBuildTreeServices());
+    }
+
+    @Override
     public void registerBuildServices(ServiceRegistration registration) {
         registration.addProvider(new DependencyManagementBuildScopeServices());
+    }
+
+    private static class DependencyManagementBuildSessionServices {
+        CacheLockingManager createCacheLockingManager(CacheRepository cacheRepository, ArtifactCacheMetaData artifactCacheMetaData) {
+            return new DefaultCacheLockingManager(cacheRepository, artifactCacheMetaData);
+        }
+
+        TransformedFileCache createTransformedFileCache(ArtifactCacheMetaData artifactCacheMetaData, CacheRepository cacheRepository, InMemoryCacheDecoratorFactory cacheDecoratorFactory, FileSystemSnapshotter fileSystemSnapshotter, ListenerManager listenerManager) {
+            DefaultTransformedFileCache transformedFileCache = new DefaultTransformedFileCache(artifactCacheMetaData, cacheRepository, cacheDecoratorFactory, fileSystemSnapshotter);
+            listenerManager.addListener(transformedFileCache);
+            return transformedFileCache;
+        }
+    }
+
+    private static class DependencyManagementBuildTreeServices {
+        protected VcsMappingsInternal createVcsMappingsInternal(Instantiator instantiator) {
+            return instantiator.newInstance(DefaultVcsMappings.class, instantiator);
+        }
+
+        protected SourceControl createSourceControl(Instantiator instantiator, VcsMappingsInternal vcsMappingsInternal) {
+            return instantiator.newInstance(DefaultSourceControl.class, vcsMappingsInternal);
+        }
     }
 }

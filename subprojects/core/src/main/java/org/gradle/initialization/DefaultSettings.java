@@ -32,7 +32,7 @@ import org.gradle.api.internal.plugins.DefaultObjectConfigurationAction;
 import org.gradle.api.internal.plugins.PluginManagerInternal;
 import org.gradle.api.internal.project.AbstractPluginAware;
 import org.gradle.api.internal.project.ProjectRegistry;
-import org.gradle.api.vcs.VcsMappings;
+import org.gradle.api.vcs.SourceControl;
 import org.gradle.caching.configuration.BuildCacheConfiguration;
 import org.gradle.composite.internal.IncludedBuildFactory;
 import org.gradle.configuration.ScriptPluginFactory;
@@ -304,13 +304,13 @@ public class DefaultSettings extends AbstractPluginAware implements SettingsInte
     }
 
     @Override
-    public void vcsMappings(Action<? super VcsMappings> configuration) {
-        configuration.execute(getVcsMappings());
+    public void sourceControl(Action<? super SourceControl> configuration) {
+        configuration.execute(getSourceControl());
     }
 
     @Override
     @Inject
-    public VcsMappings getVcsMappings() {
+    public SourceControl getSourceControl() {
         throw new UnsupportedOperationException();
     }
 }
