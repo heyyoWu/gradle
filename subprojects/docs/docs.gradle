@@ -129,7 +129,12 @@ outputs.docs = files(docsDir) {
 // The following removes all annotations from  getOutputDirectories()
 def asciidoctorOutputDirectoriesAccessor = AsciidoctorTask.getDeclaredMethod("getOutputDirectories")
 if (asciidoctorOutputDirectoriesAccessor.annotations.length > 0) {
-    def declaredAnnotationsField = java.lang.reflect.Executable.getDeclaredField("declaredAnnotations")
+    def declaredAnnotationsField
+    if (javaVersion.java7) {
+        declaredAnnotationsField = java.lang.reflect.Method.getDeclaredField("declaredAnnotations")
+    } else {
+        declaredAnnotationsField = java.lang.reflect.Executable.getDeclaredField("declaredAnnotations")
+    }
     declaredAnnotationsField.accessible = true
     declaredAnnotationsField.get(asciidoctorOutputDirectoriesAccessor).clear()
 }
