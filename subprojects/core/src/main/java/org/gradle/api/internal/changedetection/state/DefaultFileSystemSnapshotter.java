@@ -78,7 +78,7 @@ public class DefaultFileSystemSnapshotter implements FileSystemSnapshotter, Clos
         this.directoryFileTreeFactory = directoryFileTreeFactory;
         this.fileSystemMirror = fileSystemMirror;
         snapshotter = new DefaultGenericFileCollectionSnapshotter(stringInterner, directoryFileTreeFactory, this);
-        this.executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors(), new ThreadFactory() {
+        this.executorService = Executors.newCachedThreadPool(new ThreadFactory() {
             @Override
             public Thread newThread(Runnable r) {
                 return new Thread(r, "File system snapshotting");
